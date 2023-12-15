@@ -1,0 +1,424 @@
+package LinkedList;
+import java.util.Scanner;
+
+public class SimpleLL {
+	private static ListNode head;
+	//Node creation
+	private static class ListNode{
+		private int data;
+		private ListNode next;
+		
+		public ListNode(int a) {
+			data = a;
+			next = null;
+		}
+	}
+	
+	private void insertbegin(int item) {
+		// INSERT BEGIN
+		ListNode node = new ListNode(item);
+		node.next = head;
+		head = node;
+		System.out.println(item+" inserted:");
+	}
+	
+	private void insertend(int item) {
+		//INSERT END
+		ListNode node = new ListNode(item);
+		if(head == null) {
+			head = node;
+		}
+		ListNode current = head;
+		while(current.next!=null) {
+			current = current.next;
+		}
+		current.next = node;
+		System.out.println(item+" inserted:");
+	}
+	
+	private void insertposition(int item, int position) {
+		// INSERT POSITION
+		int len = count();
+		if(position >0 && position <= len+1) {
+			ListNode node = new ListNode(item);
+			if(position == 1) {
+				node.next = head;
+				head = node;
+			}
+			else {
+				ListNode previous = head;
+				int c = 1;
+				while(c<position-1) {
+					previous = previous.next;
+					c++;
+				}
+				ListNode current = previous.next;
+				node.next = current;
+				previous.next = node;
+			}
+			System.out.println(item+" inserted at position: "+position);
+		}
+		else
+		{
+			System.out.println("Invalid Position: ");
+		}
+	}
+	
+	private ListNode sortedinsert(int item) {
+		// SORTED INSERT
+		ListNode node = new ListNode(item);
+		if(head == null) {
+			return node;
+		}
+		else {
+			ListNode current = head;
+			ListNode temp = null;
+			while(current!=null && current.data<node.data) {
+				temp = current;
+				current = current.next;
+			}
+			node.next = current;
+			temp.next = node;
+			return head;
+		}
+	}
+	
+	private ListNode getMiddleNode(ListNode head) {
+		// MIDDLE NODE
+		if(head == null) {
+			return null;
+		}
+		ListNode slowptr = head;
+		ListNode fastptr = head;
+		while(fastptr!=null && fastptr.next!=null) {
+			slowptr = slowptr.next;
+			fastptr = fastptr.next.next;
+		}
+		return slowptr;
+	}
+	
+	private ListNode deletefirst() {
+		// DELETE FIRST
+		if(head == null) {
+			System.out.println("Nothing to deleted:");
+			return head;
+		}
+		if(head.next==null){
+			System.out.println(head.data+" is deleted:");
+			head = null;
+			return head;
+		}
+		ListNode temp = head;
+		head = head.next;
+		System.out.println(temp.data+" is deleted:");
+		return temp;
+	}
+	
+	private ListNode deletelast() {
+		// DELETE LAST
+		if(head == null) {
+			System.out.println("Nothing to deleted:");
+			return head;
+		}
+		if(head.next==null){
+			System.out.println(head.data+" is deleted:");
+			head = null;
+			return head;
+		}
+		ListNode previous = null;
+		ListNode current = head;
+		while(current.next!=null) {
+			previous = current;
+			current = current.next;
+		}
+		previous.next = null;
+		System.out.println(current.data+" is deleted:");
+		return current;
+	}
+	
+	private void deleteposition(int position) {
+		// DELETE POSITION
+		if(head == null) {
+			System.out.println("List is empty:");
+			return;
+		}
+		int len = count();
+		if(position<1 && position>len) {
+			System.out.println("Invalid Position: ");
+			return;
+		}
+		else {
+			if(position == 1) {
+				System.out.println(head.data+" is deleted:");
+				head = head.next;
+			}
+			else {
+				ListNode previous = head;
+				int tally = 1;
+				while(tally<position-1) {
+					previous = previous.next;
+					tally++;
+				}
+				ListNode current = previous.next;
+				previous.next = current.next;
+				System.out.println(current.data+" is deleted:");
+			}
+		}
+	}
+	
+	private void deletenode(int item) {
+		// DELETE NODE
+		if(head == null) {
+			System.out.println("List is empty:");
+		}
+		ListNode current = head;
+		ListNode previous = null;
+		while(current!=null && current.data!=item) {
+			previous = current;
+			current = current.next;
+		}
+		if(current==null) {
+			System.out.println("Item not found:so cannot deleted");
+			return;
+		}
+		previous.next = current.next;
+		System.out.println(item+" deleted:");
+	}
+	
+	private void removeduplicate(ListNode head) {
+		// DUPLICATE
+		if(head == null) {
+			System.out.println("List is empty");
+			return;
+		}
+		ListNode current = head;
+		while(current!=null && current.next!=null) {
+			if(current.data == current.next.data) {
+				current.next = current.next.next;
+			}
+			else {
+				current = current.next;
+			}
+		}
+	}	
+	
+	private void search(int item) {
+		// TODO SEARCH
+		if(head == null) {
+			System.out.println("List is empty:");
+			return;
+		}
+		int index = 1;
+		ListNode current = head;
+		while(current!=null) {
+			if(current.data == item) {
+				System.out.println(item+" Found at Node: "+index);
+				return;
+			}
+			current = current.next;
+			index++;
+		}
+		System.out.println(item+" not found:");
+	}
+	
+	private void display(ListNode head) {
+		// DISPLAY
+		if(head == null) {
+			System.out.println("List is empty:");
+			return;
+		}
+		ListNode current = head;
+		while(current!=null) {
+			System.out.print(current.data+" --> ");
+			current = current.next;
+		}
+		System.out.print("Null");
+		System.out.println();
+	}
+
+	private ListNode reverselist(ListNode head) {
+		// REVERSE LIST
+		ListNode current = head;
+		ListNode previous = null;
+		ListNode next = null;
+		while(current!=null) {
+			next = current.next;
+			current.next = previous;
+			previous = current;
+			current = next;
+		}
+		return previous;
+	}
+
+	private int count() {
+		//SIZE
+		if(head == null) {
+			return 0;
+		}
+		int a = 0;
+		ListNode current = head;
+		while(current!=null) {
+			current = current.next;
+			a++;
+		}
+		return a;
+	}
+
+	private void sort(ListNode head) {
+		// SORT
+		if(head == null) {
+			System.out.println("List is empty:");
+			return;
+		}
+		else {
+			ListNode current = head;
+			int temp;
+			while(current!=null) {
+				ListNode index = current.next;
+				while(index!=null) {
+					if(current.data>index.data) {
+						temp = current.data;
+						current.data = index.data;
+						index.data = temp;
+					}
+					index = index.next;
+				}
+				current = current.next;
+			}
+			System.out.println("List Sorted: ");
+		}
+	}
+
+	private ListNode getNthNode(ListNode head,int n) {
+		// LAST NTH NODE
+		ListNode mainptr = head;
+		ListNode refptr = head;
+		int addup = 0;
+		while(addup<n) {
+			refptr = refptr.next;
+			addup++;
+		}
+		while(refptr!=null) {
+			refptr = refptr.next;
+			mainptr = mainptr.next;
+		}
+		return mainptr;
+	}
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		Scanner u = new Scanner(System.in);
+		SimpleLL s = new SimpleLL();
+		boolean flag = false;
+		
+		s.head = new ListNode(10);
+		ListNode one = new ListNode(1);
+		ListNode two = new ListNode(4);
+		
+		s.head.next = one;
+		one.next = two;
+		
+		while(!flag) {
+			System.out.println();
+			System.out.println("Enter the choice from menu to play with List:");
+			System.out.println("1]INSERT_BEGIN	"+" 2]INSERT_END "+" 3]INSERT_POSITION "+" 4]SORTED_INSERT "+" 5]MIDDLE_NODE ");
+			System.out.println("6]DELETE_FIRST "+" 7]DELETE_LAST "+" 8]DELETE_POSITION "+"9]DELETE_NODE"+" 10]DUPLICATE ");
+			System.out.println("11]SEARCH "+" 12]DISPLAY "+" 13]REVERSE_LIST "+" 14]SORT "+" 15]LIST_SIZE "+" 16]Nth_NODE "+" 17]EXIT ");
+			int choice = u.nextInt();
+			int item;
+			int position;
+			switch(choice) {
+			case 1://INSERT BEGIN
+				System.out.println("Enter the item to be inserted at begining:");
+				item = u.nextInt();
+				s.insertbegin(item);
+				break;
+			case 2://INSERT END
+				System.out.println("Enter the item to be inserted at end:");
+				item = u.nextInt();
+				s.insertend(item);
+				break;
+			case 3://INSERT POSITION
+				System.out.println("Enter the item to be inserted at given position:");
+				item = u.nextInt();
+				position = u.nextInt();
+				s.insertposition(item,position);
+				break;
+			case 4://INSERT SORTED
+				System.out.println("Enter the item to be inserted:");
+				item = u.nextInt();
+				s.sortedinsert(item);
+				s.display(head);
+				break;
+			case 5://MIDDLE NODE
+				ListNode middlenode = s.getMiddleNode(head);
+				System.out.println("Item at the middle of the list: "+middlenode.data);
+				break;
+			case 6://DELETE FIRST
+				System.out.println("Delete item at begining:");
+				s.deletefirst();
+				break;
+			case 7://DELETE LAST
+				System.out.println("Delete item at end:");
+				s.deletelast();
+				break;
+			case 8://DELETE POSITION
+				System.out.println("Delete item at given position: ");
+				position = u.nextInt();
+				s.deleteposition(position);
+				break;
+			case 9://DELETE NODE
+				System.out.println("Enter item to be deleted:");
+				item = u.nextInt();
+				s.deletenode(item);
+				break;
+			case 10://DUPLICATE
+				s.removeduplicate(head);
+				s.display(head);
+				break;
+			case 11://SEARCH
+				System.out.println("Enter the item to be searched: ");
+				item = u.nextInt();
+				s.search(item);
+				break;
+			case 12://DISPLAY
+				System.out.println("The list: ");
+				s.display(head);
+				break;
+			case 13://REVERSE LIST
+				ListNode reverse = s.reverselist(head);
+				System.out.println("The Reversed List: ");
+				s.display(reverse);
+				System.out.println("NOTE: **Once displaying the reversed list it is brought to original form: by calling function again in the background**");
+				s.reverselist(reverse);
+				break;
+			case 14://SORT
+				s.sort(head);
+				s.display(head);
+				break;
+			case 15://SIZE
+				int size = s.count();
+				System.out.println("The size of the list: "+size);
+				break;
+			case 16://NTH NODE
+				System.out.println("Enter the Nth node :");
+				int n = u.nextInt();
+				ListNode Nth = s.getNthNode(head,n);
+				System.out.println("Item at the "+n+"th node from end is: "+Nth.data);
+				break;
+			case 17://EXIT
+				System.out.println("DO U WANT TO STOP PLAYING WITH LIST ALREADY?(Y/N)");
+				char a = u.next().charAt(0);
+				if(a == 'y') {
+					System.out.println("YOU EXITED LOOP SUCCESSFULLY -- "+"**COME BACK AGAIN**");
+					flag = true;
+					break;
+				}
+				break;
+			default:
+				System.out.println("INVALID_CHOICE: ** PLEASE ENTER CHOICE FROM MENU **");
+				break;
+			}
+		}
+	}
+}
