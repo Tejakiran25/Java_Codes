@@ -1,3 +1,4 @@
+```Java ()
 package LinkedList;
 import java.util.Scanner;
 
@@ -422,3 +423,4 @@ public class SimpleLL {
 		}
 	}
 }
+```
